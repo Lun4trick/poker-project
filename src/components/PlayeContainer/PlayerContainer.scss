@@ -1,0 +1,31 @@
+.player-info {
+  width: 200px; /* Szélesség */
+  margin: 30px auto; /* Középre igazítás */
+  background-color: rgb(32, 49, 54);
+  text-align: center;
+  border: 3px solid rgb(9, 90, 110);
+  border-radius: 10px; /* Kerekített sarkok */
+  padding: 10px; /* Térköz az elemek és a keret között */
+  box-shadow: 0px 10px 5px #000000; /* Árnyékolás */
+
+  &--is-active {
+    background-color: rgb(54, 32, 32);
+  }
+
+  &__name {
+    color: white;
+    font-weight: bold; /* Félkövér betűtípus */
+  }
+
+  &__chips {
+    font-size: 30px;
+    color: #ffffff; /* Zöld szövegszín */
+    font-weight: bold; /* Félkövér betűtípus */
+  }
+
+  &__holeCards {
+    display: flex;
+    height: 70px;
+    justify-content: center;
+  }
+}

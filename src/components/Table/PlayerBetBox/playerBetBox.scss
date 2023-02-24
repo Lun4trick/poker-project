@@ -1,0 +1,19 @@
+.bet-box {
+  display: flex;
+  color: white;
+  justify-content: space-between;
+  align-items: end;
+  margin: auto;
+  width: 150px;
+  height: 50px;
+}
+
+.dealer-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  height: 20px;
+  width: 30px;
+  background-color: yellow;
+}

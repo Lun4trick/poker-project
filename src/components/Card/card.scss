@@ -1,0 +1,48 @@
+.card {
+  width: 80px;
+  height: 110px;
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  box-shadow: 3px 1px 10px black;
+
+  &__rank {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 28px;
+    color: white;
+    position: absolute;
+    left: 5px;
+  }
+
+  &__suit {
+    font-size: 36px;
+    color: white;
+    position: absolute;
+    bottom: 0px;
+    right: 5px;
+  }
+
+  &--s {
+    background-color: rgb(26, 26, 26);
+  }
+
+  &--h {
+    background-color: rgb(126, 2, 2);
+  }
+
+  &--c {
+    background-color: rgb(17, 173, 3);
+  }
+
+  &--d {
+    background-color: rgb(20, 136, 182);
+  }
+
+  &--hidden {
+    background-color: rgb(94, 50, 50);
+  }
+}
