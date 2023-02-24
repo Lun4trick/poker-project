@@ -348,8 +348,6 @@ export const VillainContainer: React.FC = () => {
 
     const equity = (wins / ((wins + losses) / 100));
 
-    console.log(equity);
-
     return equity;
   };
 

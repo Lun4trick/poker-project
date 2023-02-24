@@ -55,7 +55,7 @@ export const GameStateSlice = createSlice({
   name: 'gameStates',
   initialState,
   reducers: {
-    setPotManually: (state, action) =>{
+    setPotManually: (state, action) => {
       state.potSize = action.payload;
     },
 

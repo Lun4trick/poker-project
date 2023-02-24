@@ -1,6 +1,5 @@
 /* eslint-disable no-plusplus */
 import React, { useCallback, useEffect, useState } from 'react';
-import './App.css';
 import 'bulma/css/bulma.css';
 import { HeroContainer } from './components/PlayeContainer/HeroContainer';
 import { VillainContainer } from './components/PlayeContainer/VillainBot';

@@ -5,7 +5,7 @@ import { useAppSelector } from '../../app/hooks';
 
 type Props = {
   card: Card;
-}
+};
 const PlayingCard: React.FC<Props> = ({ card }) => {
   const {
     value,
