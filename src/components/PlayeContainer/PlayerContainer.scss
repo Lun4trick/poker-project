@@ -1,5 +1,8 @@
 .player-info {
-  width: 200px; /* Szélesség */
+  width: 50vw; /* Szélesség */
+  height: 20vh;
+  max-height: 200px;
+  max-width: 200px;
   margin: 30px auto; /* Középre igazítás */
   background-color: rgb(32, 49, 54);
   text-align: center;
@@ -14,18 +17,19 @@
 
   &__name {
     color: white;
+    font-size: 150%;
     font-weight: bold; /* Félkövér betűtípus */
   }
 
   &__chips {
-    font-size: 30px;
+    font-size: 150%;
     color: #fff; /* Zöld szövegszín */
     font-weight: bold; /* Félkövér betűtípus */
   }
 
   &__holeCards {
     display: flex;
-    height: 70px;
+    height: 210%;
     justify-content: center;
   }
 }

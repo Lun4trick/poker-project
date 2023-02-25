@@ -1,6 +1,7 @@
 /* eslint-disable no-plusplus */
 import React, { useCallback, useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
+import './app.scss';
 import { HeroContainer } from './components/PlayeContainer/HeroContainer';
 import { VillainContainer } from './components/PlayeContainer/VillainBot';
 import { TabeleBody } from './components/Table/TableBody/Table';
@@ -86,45 +87,62 @@ const App: React.FC = () => {
   }, [currentButton]);
 
   const dealStreet = async () => {
-    switch (currentStreet) {
-      case FLOP:
-        await wait(500);
-        dispatch(setPot());
-        await wait(2000);
-        dispatch(getFlop());
-        await wait(500);
-        dispatch(setActivePlayerByDealer());
-        break;
+    if (lastMove !== ActionType.FOLD) {
+      switch (currentStreet) {
+        case FLOP:
+          await wait(500);
+          dispatch(setPot());
+          await wait(2000);
+          dispatch(getFlop());
+          await wait(500);
+          dispatch(setActivePlayerByDealer());
+          break;
 
-      case TURN:
-        await wait(500);
-        dispatch(setPot());
-        await wait(2000);
-        dispatch(getTurn());
-        await wait(500);
-        dispatch(setActivePlayerByDealer());
-        break;
+        case TURN:
+          await wait(500);
+          dispatch(setPot());
+          await wait(2000);
+          dispatch(getTurn());
+          await wait(500);
+          dispatch(setActivePlayerByDealer());
+          break;
 
-      case RIVER:
-        await wait(500);
-        dispatch(setPot());
-        await wait(2000);
-        dispatch(getRiver());
-        await wait(500);
-        dispatch(setActivePlayerByDealer());
-        break;
+        case RIVER:
+          await wait(500);
+          dispatch(setPot());
+          await wait(2000);
+          dispatch(getRiver());
+          await wait(500);
+          dispatch(setActivePlayerByDealer());
+          break;
 
-      case GETWINNER:
-        await wait(500);
-        dispatch(setPot());
-        break;
+        case GETWINNER:
+          await wait(500);
+          dispatch(setPot());
+          break;
 
-      default:
-        break;
+        default:
+          break;
+      }
     }
   };
 
   const getWinner = async () => {
+    if (lastMove === ActionType.FOLD && lastPlayer === PlayerType.VILLAIN) {
+      setWinner(WinnerType.HERO);
+
+      return;
+    }
+
+    if (
+      lastPlayer === PlayerType.HERO
+      && lastMove === ActionType.FOLD
+    ) {
+      setWinner(WinnerType.VILLAIN);
+
+      return;
+    }
+
     const heroFinalCombination = getCombination(board, heroHand);
 
     const villainFinalCombination = getCombination(board, villainHand);
@@ -189,35 +207,39 @@ const App: React.FC = () => {
     checkWinnerByHighCard();
   };
 
-  const givePotToWinner = () => {
-    switch (currentWinner) {
-      case WinnerType.HERO:
-        dispatch(heroWin());
-        break;
-
-      case WinnerType.VILLAIN:
-        dispatch(villainWin());
-        break;
-
-      default:
-        dispatch(splitPot());
-    }
-  };
-
-  const onHandIsOver = async () => {
-    if (lastMove === ActionType.FOLD && lastPlayer === PlayerType.VILLAIN) {
-      setWinner(WinnerType.HERO);
-    } else if (
-      lastPlayer === PlayerType.HERO
-      && lastMove === ActionType.FOLD
-    ) {
-      setWinner(WinnerType.VILLAIN);
-    }
-
+  const onHandIsOver = async (winner: WinnerType) => {
     dispatch(setPot());
     setDealCount(prev => prev + 1);
     await wait(3000);
-    givePotToWinner();
+    if (lastMove === ActionType.FOLD) {
+      switch (lastPlayer) {
+        case PlayerType.HERO:
+          dispatch(villainWin());
+          break;
+        case PlayerType.VILLAIN:
+          dispatch(heroWin());
+          break;
+        default:
+          break;
+      }
+    } else {
+      switch (winner) {
+        case WinnerType.HERO:
+          dispatch(heroWin());
+          break;
+
+        case WinnerType.VILLAIN:
+          dispatch(villainWin());
+          break;
+
+        case WinnerType.SPLIT:
+          dispatch(splitPot());
+          break;
+        default:
+          break;
+      }
+    }
+
     await wait(2000);
     dispatch(onHandOverGameStates());
     dispatch(clearBoard());
@@ -238,13 +260,13 @@ const App: React.FC = () => {
 
   useEffect(() => {
     if (lastMove === ActionType.FOLD) {
-      onHandIsOver();
+      onHandIsOver(currentWinner as WinnerType);
     }
   }, [lastMove]);
 
   useEffect(() => {
     if (currentStreet === GETWINNER) {
-      onHandIsOver();
+      onHandIsOver(currentWinner as WinnerType);
     }
   }, [currentStreet]);
 
@@ -261,11 +283,12 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <div>
+    <div className="app-container">
       <VillainContainer />
       <TabeleBody />
       <HeroContainer />
-      {lastPlayer === PlayerType.HERO && (
+      {(lastPlayer === PlayerType.HERO
+      && lastMove === ActionType.NONE) && (
         <ActionButtons />
       )}
     </div>

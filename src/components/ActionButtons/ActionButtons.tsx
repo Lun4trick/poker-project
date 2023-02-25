@@ -59,49 +59,53 @@ export const ActionButtons: React.FC = () => {
   };
 
   return (
-    <div className="actionButtons buttons are-large">
-      <div className="slider">
-        <input
-          className="slider is-fullwidth is-large is-danger is-circle"
-          min={minBet}
-          max={heroChips}
-          type="range"
-          value={currentBet}
-          onChange={(event) => (
-            setCurrentBet(Number(event.target.value))
-          )}
-        />
+    <>
+      <div className="slider-container">
+        <div className="slider">
+          <input
+            className="slider is-fullwidth is-large is-danger is-circle"
+            min={minBet}
+            max={heroChips}
+            type="range"
+            value={currentBet}
+            onChange={(event) => (
+              setCurrentBet(Number(event.target.value))
+            )}
+          />
+        </div>
       </div>
-      <button
-        type="button"
-        className="action-button button is-danger"
-        onClick={betButtonHandler}
-      >
-        {
-          (villainsBet > 0)
-            ? currentBet || 'Raise'
-            : currentBet || 'Bet'
-        }
-      </button>
-      <button
-        type="button"
-        className="action-button button is-success"
-        onClick={callCheckButtonHandler}
-      >
-        {villainsBet > herosBet
-          ? 'Call'
-          : 'Check'}
-      </button>
+      <div className="actionButtons buttons are-large">
+        <button
+          type="button"
+          className="action-button button is-danger is-responsive"
+          onClick={betButtonHandler}
+        >
+          {
+            (villainsBet > 0)
+              ? currentBet || 'Raise'
+              : currentBet || 'Bet'
+          }
+        </button>
+        <button
+          type="button"
+          className="action-button button is-success is-responsive"
+          onClick={callCheckButtonHandler}
+        >
+          {villainsBet > herosBet
+            ? 'Call'
+            : 'Check'}
+        </button>
 
-      <button
-        type="button"
-        className="action-button button is-link"
-        onClick={() => {
-          dispatch(setPlayerAction(ActionType.FOLD));
-        }}
-      >
-        Fold
-      </button>
-    </div>
+        <button
+          type="button"
+          className="action-button button is-link is-responsive"
+          onClick={() => {
+            dispatch(setPlayerAction(ActionType.FOLD));
+          }}
+        >
+          Fold
+        </button>
+      </div>
+    </>
   );
 };

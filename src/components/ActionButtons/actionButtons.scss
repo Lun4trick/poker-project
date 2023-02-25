@@ -1,17 +1,26 @@
 .actionButtons {
   display: flex;
-  justify-content: end;
+  justify-content: center;
+  width: 50vh;
+  max-width: 500px;
+  margin: auto;
   gap: 10px;
-  padding-top: 25px;
-  padding-right: 75px;
   padding-bottom: 25px;
 }
 
-.action-button {
-  width: 150px;
+.button {
+  width: 30%;
+}
+
+.slider-container {
+    display: flex;
+    width: 50vh;
+    max-width: 500px;
+    margin: auto;
+    gap: 10px;
 }
 
 .slider {
   height: 100%;
-  width: 300px;
+  width: 100%;
 }

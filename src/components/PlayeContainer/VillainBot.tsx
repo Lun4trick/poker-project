@@ -33,11 +33,13 @@ export const VillainContainer: React.FC = () => {
   // Villains States
   const holeCards = useAppSelector(state => state.cards.villainHand);
   const villainsChips = useAppSelector(state => state.game.villainsChips);
+  // const herosChips = useAppSelector(state => state.game.herosChips);
   const villainsBet = useAppSelector(state => state.game.villainBetBox);
   const [preRange, setPreRange] = useState<PreHand>();
   const isFacingBet = herosBet > villainsBet;
   const isPreFacingBet = (
-    herosBet > villainsBet && herosPreMove === ActionType.BET
+    herosBet > villainsBet
+    && herosPreMove === ActionType.BET
   );
   const [isAgressor, setIsAgressor] = useState(false);
   // Tables States
@@ -52,12 +54,18 @@ export const VillainContainer: React.FC = () => {
 
   const dispatch = useAppDispatch();
 
+  // const someoneIsAllIn = herosChips === 0 || villainsChips === 0;
+
   const {
     VALUERAISERANGE,
     SEMIBLUFFRANGE,
     CALLRANGE,
     TRASHRANGE,
   } = PreHand;
+
+  useEffect(() => {
+    saveHerosPreMove(ActionType.NONE);
+  }, [holeCards]);
 
   const onVillainAction = (amount: number, action: ActionType) => {
     dispatch(setVillainBetBox(amount));
@@ -162,18 +170,24 @@ export const VillainContainer: React.FC = () => {
   function preFlopDecision() {
     const randomNumber = Math.random() * 100;
 
+    const raiseSize = (
+      (herosBet * 3) > (villainsChips + villainsBet) / 2
+    )
+      ? villainsChips + villainsBet
+      : herosBet * 3;
+
     if (
       lastAction !== ActionType.CALL
       && currentButton !== PlayerType.VILLAIN
     ) {
       switch (preRange) {
         case (VALUERAISERANGE):
-          onVillainAction(herosBet * 2.5, ActionType.BET);
+          onVillainAction(raiseSize, ActionType.BET);
           setIsAgressor(true);
           break;
         case (SEMIBLUFFRANGE):
           if (randomNumber < 40) {
-            onVillainAction(herosBet * 3, ActionType.BET);
+            onVillainAction(raiseSize, ActionType.BET);
             setIsAgressor(true);
           } else {
             onVillainAction(herosBet, ActionType.CALL);
@@ -197,12 +211,12 @@ export const VillainContainer: React.FC = () => {
     } else if (!isPreFacingBet) {
       switch (preRange) {
         case (VALUERAISERANGE):
-          onVillainAction(herosBet * 2.5, ActionType.BET);
+          onVillainAction(raiseSize, ActionType.BET);
           setIsAgressor(true);
           break;
         case (SEMIBLUFFRANGE):
           if (randomNumber < 40) {
-            onVillainAction(herosBet * 3, ActionType.BET);
+            onVillainAction(raiseSize, ActionType.BET);
             setIsAgressor(true);
           } else {
             onVillainAction(herosBet, ActionType.LIMP);
@@ -395,7 +409,7 @@ export const VillainContainer: React.FC = () => {
     )
       ? villainsChips + villainsBet
       : herosBet * 3;
-    const probeSize = currentPot * 0.7;
+    const probeSize = Math.floor(currentPot * 0.7);
 
     switch (decision) {
       case ActionType.BET:
@@ -446,9 +460,16 @@ export const VillainContainer: React.FC = () => {
     }
   }, [activePlayer]);
 
+  const isVillainMadeAction = (
+    activePlayer === PlayerType.VILLAIN && lastAction !== ActionType.NONE);
+
   return (
     <div className="player-info">
-      <h2 className="player-info__name">Villain</h2>
+      <h2 className="player-info__name">
+        {isVillainMadeAction
+          ? lastAction
+          : 'Villain'}
+      </h2>
       <h2 className="player-info__chips">{villainsChips}</h2>
       <div className="player-info__holeCards">
         {holeCards.map(card => (
