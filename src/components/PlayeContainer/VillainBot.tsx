@@ -33,7 +33,7 @@ export const VillainContainer: React.FC = () => {
   // Villains States
   const holeCards = useAppSelector(state => state.cards.villainHand);
   const villainsChips = useAppSelector(state => state.game.villainsChips);
-  // const herosChips = useAppSelector(state => state.game.herosChips);
+  const herosChips = useAppSelector(state => state.game.herosChips);
   const villainsBet = useAppSelector(state => state.game.villainBetBox);
   const [preRange, setPreRange] = useState<PreHand>();
   const isFacingBet = herosBet > villainsBet;
@@ -54,7 +54,7 @@ export const VillainContainer: React.FC = () => {
 
   const dispatch = useAppDispatch();
 
-  // const someoneIsAllIn = herosChips === 0 || villainsChips === 0;
+  const someoneIsAllIn = herosChips === 0 || villainsChips === 0;
 
   const {
     VALUERAISERANGE,
@@ -170,11 +170,18 @@ export const VillainContainer: React.FC = () => {
   function preFlopDecision() {
     const randomNumber = Math.random() * 100;
 
-    const raiseSize = (
-      (herosBet * 3) > (villainsChips + villainsBet) / 2
-    )
-      ? villainsChips + villainsBet
-      : herosBet * 3;
+    const getRaiseSize = () => {
+      switch (true) {
+        case (herosBet * 3) > (villainsChips + villainsBet) / 2:
+          return villainsBet + villainsChips;
+        case (herosBet * 3) > (herosBet + herosChips) / 2:
+          return herosChips + herosBet;
+        default:
+          return herosBet * 3;
+      }
+    };
+
+    const raiseSize = getRaiseSize();
 
     if (
       lastAction !== ActionType.CALL
@@ -182,11 +189,14 @@ export const VillainContainer: React.FC = () => {
     ) {
       switch (preRange) {
         case (VALUERAISERANGE):
-          onVillainAction(raiseSize, ActionType.BET);
-          setIsAgressor(true);
+          if (!someoneIsAllIn) {
+            onVillainAction(raiseSize, ActionType.BET);
+            setIsAgressor(true);
+          }
+
           break;
         case (SEMIBLUFFRANGE):
-          if (randomNumber < 40) {
+          if (randomNumber < 40 && !someoneIsAllIn) {
             onVillainAction(raiseSize, ActionType.BET);
             setIsAgressor(true);
           } else {
@@ -400,16 +410,31 @@ export const VillainContainer: React.FC = () => {
     const eq = calculateEquity(currentRange, remainingCards);
 
     await wait(500);
-    const decision = makePostFlopDecision(eq, isAgressor, isFacingBet);
+    let decision = makePostFlopDecision(eq, isAgressor, isFacingBet);
+
+    if (decision === ActionType.BET && someoneIsAllIn) {
+      decision = ActionType.CALL;
+    }
 
     await wait(500);
 
-    const raiseSize = (
-      (herosBet * 3) > (villainsChips + villainsBet) / 2
+    const getRaiseSize = () => {
+      switch (true) {
+        case (herosBet * 3) > (villainsChips + villainsBet) / 2:
+          return villainsBet + villainsChips;
+        case (herosBet * 3) > (herosBet + herosChips) / 2:
+          return herosChips + herosBet;
+        default:
+          return herosBet * 3;
+      }
+    };
+
+    const raiseSize = getRaiseSize();
+    const probeSize = (
+      Math.floor(currentPot * 0.7) > villainsBet + villainsChips
     )
-      ? villainsChips + villainsBet
-      : herosBet * 3;
-    const probeSize = Math.floor(currentPot * 0.7);
+      ? villainsBet + villainsChips
+      : Math.floor(currentPot * 0.7);
 
     switch (decision) {
       case ActionType.BET:

@@ -7,7 +7,7 @@ export const Pot: React.FC = () => {
 
   return (
     <>
-      {potSize && (
+      {potSize > 0 && (
         <div className="chip-heap">
           <div className="chips" />
           <p className="pot-size">{potSize}</p>

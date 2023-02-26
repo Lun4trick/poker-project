@@ -17,7 +17,10 @@ export const HeroBetBox: React.FC = () => {
       )}
       {heroBet > 0 && (
         <div className="bet-amount">
-          {heroBet}
+          <div className="bet-chips" />
+          <p>
+            {heroBet}
+          </p>
         </div>
       )}
     </div>

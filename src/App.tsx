@@ -143,6 +143,22 @@ const App: React.FC = () => {
       return;
     }
 
+    // const testBoard = [
+    //   { name: 3, value: '3', color: 's' },
+    //   { name: 3, value: '3', color: 'h' },
+    //   { name: 6, value: '6', color: 's' },
+    //   { name: 9, value: '9', color: 's' },
+    //   { name: 10, value: '10', color: 'h' },
+    // ];
+    // const testVillain = [
+    //   { name: 13, value: 'K', color: 's' },
+    //   { name: 6, value: '6', color: 'c' },
+    // ];
+    // const testHero = [
+    //   { name: 12, value: 'Q', color: 's' },
+    //   { name: 6, value: '6', color: 'h' },
+    // ];
+
     const heroFinalCombination = getCombination(board, heroHand);
 
     const villainFinalCombination = getCombination(board, villainHand);
@@ -181,7 +197,7 @@ const App: React.FC = () => {
       let heroHigh = 0;
       let villainHigh = 0;
 
-      for (let i = villainFinalCombination[1].length - 1; i > 0; i--) {
+      for (let i = villainFinalCombination[1].length - 1; i >= 0; i--) {
         if (villainFinalCombination[1][i] !== heroFinalCombination[1][i]) {
           heroHigh = heroFinalCombination[1][i];
           villainHigh = villainFinalCombination[1][i];

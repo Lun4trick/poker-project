@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   setActivePlayerByDealer,
@@ -16,19 +16,12 @@ export const ActionButtons: React.FC = () => {
   const dispatch = useAppDispatch();
   const villainsBet = useAppSelector(state => state.game.villainBetBox);
   const herosBet = useAppSelector(state => state.game.heroBetBox);
-  const minBet = villainsBet * 2;
+  const minBet = villainsBet
+    ? villainsBet * 2
+    : 100;
   const heroChips = useAppSelector(state => state.game.herosChips);
   const [currentBet, setCurrentBet] = useState(minBet);
-  // const activePlayer = useAppSelector(state => state.game.activePlayer);
-  // const lastAction = useAppSelector(state => state.game.activePlayersMove);
-  // const [lastVillainAction, setLastVillainAction] = useState<ActionType>();
   const currentButton = useAppSelector(state => state.game.currentButton);
-
-  // useEffect(() => {
-  //   if (activePlayer === PlayerType.VILLAIN) {
-  //     setLastVillainAction(lastAction);
-  //   }
-  // }, [lastAction]);
 
   const betButtonHandler = async () => {
     dispatch(setHeroBetBox(currentBet));
@@ -58,14 +51,21 @@ export const ActionButtons: React.FC = () => {
     dispatch(setActivePlayerByDealer());
   };
 
+  useEffect(() => {
+    if (heroChips === 0) {
+      callCheckButtonHandler();
+    }
+  }, [currentStreet]);
+
   return (
     <>
       <div className="slider-container">
         <div className="slider">
           <input
             className="slider is-fullwidth is-large is-danger is-circle"
+            step={5}
             min={minBet}
-            max={heroChips}
+            max={heroChips + herosBet}
             type="range"
             value={currentBet}
             onChange={(event) => (
