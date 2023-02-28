@@ -15,6 +15,8 @@ export interface GameStateType {
   currentStreet: StreetType,
   activePlayer: PlayerType,
   activePlayersMove: ActionType,
+  gamesWonByHero: number,
+  gamesWonByVillain: number,
 }
 
 const {
@@ -49,12 +51,27 @@ const initialState: GameStateType = {
   currentStreet: PREFLOP,
   activePlayer: HERO,
   activePlayersMove: NONE,
+  gamesWonByHero: 0,
+  gamesWonByVillain: 0,
 };
 
 export const GameStateSlice = createSlice({
   name: 'gameStates',
   initialState,
   reducers: {
+    resetChips: (state) => {
+      state.herosChips = 2500;
+      state.villainsChips = 2500;
+    },
+
+    increaseHerosWins: (state) => {
+      state.gamesWonByHero += 1;
+    },
+
+    increaseVillauinsWins: (state) => {
+      state.gamesWonByVillain += 1;
+    },
+
     setPotManually: (state, action) => {
       state.potSize = action.payload;
     },
@@ -222,6 +239,9 @@ export const GameStateSlice = createSlice({
 });
 
 export const {
+  resetChips,
+  increaseHerosWins,
+  increaseVillauinsWins,
   setPotManually,
   changeCurrentButton,
   onHandOverGameStates,

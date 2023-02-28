@@ -1,0 +1,15 @@
+.counter_box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  left: 0;
+  top: 0;
+  font-size: 25px;
+  font-weight: bold;
+  color: rgb(153, 31, 31);
+  border: 10px solid rgb(153, 31, 31);
+  border-radius: 20%;
+  height: 20%;
+  width: 20%;
+}

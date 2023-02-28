@@ -9,7 +9,10 @@ import { ActionButtons } from './components/ActionButtons/ActionButtons';
 import {
   changeCurrentButton,
   heroWin,
+  increaseHerosWins,
+  increaseVillauinsWins,
   onHandOverGameStates,
+  resetChips,
   setActivePlayerByButton,
   setActivePlayerByDealer,
   setHeroBetBox, setPot,
@@ -34,6 +37,7 @@ import { PlayerType } from './utils/Types/PlayerType';
 import { getCombination } from './utils/functions/getCombination';
 import { ActionType } from './utils/Types/ActionType';
 import { WinnerType } from './utils/Types/WinnerType';
+import { GamesWonCounter } from './components/MatchsWonCounter/GamesWonCounter';
 
 const App: React.FC = () => {
   const {
@@ -54,6 +58,8 @@ const App: React.FC = () => {
   const [currentWinner, setWinner] = useState<WinnerType | null>(null);
   const [isSomeoneFolded, setIsSomeoneFolded] = useState(false);
   const [dealcount, setDealCount] = useState(0);
+  const villainsChips = useAppSelector(state => state.game.villainsChips);
+  const herosChips = useAppSelector(state => state.game.herosChips);
   const dispatch = useAppDispatch();
 
   const setBlinds = useCallback(() => {
@@ -257,6 +263,23 @@ const App: React.FC = () => {
       }
     }
 
+    if (!herosChips || !villainsChips) {
+      switch (true) {
+        case !herosChips:
+          dispatch(increaseVillauinsWins());
+          break;
+
+        case !villainsChips:
+          dispatch(increaseHerosWins());
+          break;
+
+        default:
+          break;
+      }
+
+      dispatch(resetChips());
+    }
+
     await wait(2000);
     dispatch(onHandOverGameStates());
     dispatch(clearBoard());
@@ -285,7 +308,7 @@ const App: React.FC = () => {
   }, [lastMove]);
 
   useEffect(() => {
-    if (currentStreet === GETWINNER) {
+    if (currentStreet === GETWINNER && !isSomeoneFolded) {
       onHandIsOver(currentWinner as WinnerType);
     }
   }, [currentStreet]);
@@ -304,6 +327,7 @@ const App: React.FC = () => {
 
   return (
     <div className="app-container">
+      <GamesWonCounter />
       <VillainContainer />
       <TabeleBody />
       <HeroContainer />
