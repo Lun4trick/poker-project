@@ -433,9 +433,9 @@ export const VillainContainer: React.FC = () => {
 
     const raiseSize = getRaiseSize();
     const probeSize = (
-      Math.floor(currentPot * 0.7) > villainsBet + villainsChips
+      Math.floor(currentPot * 0.7) > maxBet
     )
-      ? villainsBet + villainsChips
+      ? maxBet
       : Math.floor(currentPot * 0.7);
 
     switch (decision) {

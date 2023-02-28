@@ -248,11 +248,23 @@ const App: React.FC = () => {
     } else {
       switch (winner) {
         case WinnerType.HERO:
-          dispatch(heroWin());
+          if (villainsChips === 0) {
+            dispatch(increaseHerosWins());
+            dispatch(resetChips());
+          } else {
+            dispatch(heroWin());
+          }
+
           break;
 
         case WinnerType.VILLAIN:
-          dispatch(villainWin());
+          if (herosChips === 0) {
+            dispatch(increaseVillauinsWins());
+            dispatch(resetChips());
+          } else {
+            dispatch(villainWin());
+          }
+
           break;
 
         case WinnerType.SPLIT:
@@ -261,23 +273,6 @@ const App: React.FC = () => {
         default:
           break;
       }
-    }
-
-    if (!herosChips || !villainsChips) {
-      switch (true) {
-        case !herosChips:
-          dispatch(increaseVillauinsWins());
-          break;
-
-        case !villainsChips:
-          dispatch(increaseHerosWins());
-          break;
-
-        default:
-          break;
-      }
-
-      dispatch(resetChips());
     }
 
     await wait(2000);

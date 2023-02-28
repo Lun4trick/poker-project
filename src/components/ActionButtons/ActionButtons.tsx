@@ -110,6 +110,24 @@ export const ActionButtons: React.FC = () => {
         </div>
       </div>
       <div className="actionButtons buttons are-large">
+        <button
+          type="button"
+          className="action-button button is-link is-responsive"
+          onClick={() => {
+            dispatch(setPlayerAction(ActionType.FOLD));
+          }}
+        >
+          Fold
+        </button>
+        <button
+          type="button"
+          className="action-button button is-success is-responsive"
+          onClick={callCheckButtonHandler}
+        >
+          {villainsBet > herosBet
+            ? 'Call'
+            : 'Check'}
+        </button>
         {(
           allChipsOfHero > villainsBet
           && villainChips > 0) && (
@@ -125,25 +143,6 @@ export const ActionButtons: React.FC = () => {
             }
           </button>
         )}
-        <button
-          type="button"
-          className="action-button button is-success is-responsive"
-          onClick={callCheckButtonHandler}
-        >
-          {villainsBet > herosBet
-            ? 'Call'
-            : 'Check'}
-        </button>
-
-        <button
-          type="button"
-          className="action-button button is-link is-responsive"
-          onClick={() => {
-            dispatch(setPlayerAction(ActionType.FOLD));
-          }}
-        >
-          Fold
-        </button>
       </div>
     </div>
   );
