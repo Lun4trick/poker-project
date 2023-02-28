@@ -20,8 +20,14 @@ export const ActionButtons: React.FC = () => {
     ? villainsBet * 2
     : 100;
   const heroChips = useAppSelector(state => state.game.herosChips);
+  const villainChips = useAppSelector(state => state.game.villainsChips);
   const [currentBet, setCurrentBet] = useState(minBet);
   const currentButton = useAppSelector(state => state.game.currentButton);
+
+  const isSomeoneAllIn = (
+    (heroChips === 0 && herosBet === 0)
+    || (villainChips === 0 && villainsBet === 0)
+  );
 
   const betButtonHandler = async () => {
     dispatch(setHeroBetBox(currentBet));
@@ -52,7 +58,7 @@ export const ActionButtons: React.FC = () => {
   };
 
   useEffect(() => {
-    if (heroChips === 0) {
+    if (isSomeoneAllIn) {
       callCheckButtonHandler();
     }
   }, [currentStreet]);

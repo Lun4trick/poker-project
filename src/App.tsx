@@ -52,6 +52,7 @@ const App: React.FC = () => {
   const lastPlayer = useAppSelector(state => state.game.activePlayer);
   const lastMove = useAppSelector(state => state.game.activePlayersMove);
   const [currentWinner, setWinner] = useState<WinnerType | null>(null);
+  const [isSomeoneFolded, setIsSomeoneFolded] = useState(false);
   const [dealcount, setDealCount] = useState(0);
   const dispatch = useAppDispatch();
 
@@ -87,7 +88,7 @@ const App: React.FC = () => {
   }, [currentButton]);
 
   const dealStreet = async () => {
-    if (lastMove !== ActionType.FOLD) {
+    if (!isSomeoneFolded) {
       switch (currentStreet) {
         case FLOP:
           await wait(500);
@@ -144,19 +145,19 @@ const App: React.FC = () => {
     }
 
     // const testBoard = [
-    //   { name: 3, value: '3', color: 's' },
-    //   { name: 3, value: '3', color: 'h' },
     //   { name: 6, value: '6', color: 's' },
+    //   { name: 8, value: '8', color: 'h' },
     //   { name: 9, value: '9', color: 's' },
-    //   { name: 10, value: '10', color: 'h' },
+    //   { name: 10, value: '10', color: 's' },
+    //   { name: 6, value: '6', color: 'h' },
     // ];
     // const testVillain = [
-    //   { name: 13, value: 'K', color: 's' },
-    //   { name: 6, value: '6', color: 'c' },
+    //   { name: 7, value: '7', color: 's' },
+    //   { name: 13, value: 'K', color: 'c' },
     // ];
     // const testHero = [
-    //   { name: 12, value: 'Q', color: 's' },
-    //   { name: 6, value: '6', color: 'h' },
+    //   { name: 7, value: '7', color: 's' },
+    //   { name: 12, value: 'Q', color: 'h' },
     // ];
 
     const heroFinalCombination = getCombination(board, heroHand);
@@ -214,6 +215,9 @@ const App: React.FC = () => {
       }
     };
 
+    // console.log(heroFinalCombination, villainFinalCombination);
+    // console.log(heroValueOfCombination, villainValueOfCombination);
+
     if (heroValueOfCombination !== villainValueOfCombination) {
       checkWinnerByCombination();
 
@@ -264,6 +268,8 @@ const App: React.FC = () => {
     dispatch(setHeroBetBox(0));
     dispatch(setVillainBetBox(0));
     await wait(100);
+    setIsSomeoneFolded(false);
+    await wait(100);
     DealCards();
     await wait(500);
     changeButton();
@@ -272,10 +278,11 @@ const App: React.FC = () => {
 
   useEffect(() => {
     getWinner();
-  }, [currentStreet]);
+  }, [board]);
 
   useEffect(() => {
     if (lastMove === ActionType.FOLD) {
+      setIsSomeoneFolded(true);
       onHandIsOver(currentWinner as WinnerType);
     }
   }, [lastMove]);
