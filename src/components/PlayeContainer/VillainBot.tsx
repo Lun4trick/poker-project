@@ -51,6 +51,9 @@ export const VillainContainer: React.FC = () => {
   const currentButton = useAppSelector(state => state.game.currentButton);
   const remainingCards = [...currentDeck, ...heroCards];
   const currentPot = useAppSelector(state => state.game.potSize);
+  const maxBet = (villainsChips + villainsBet) > (herosBet + herosChips)
+    ? herosChips + herosBet
+    : villainsChips + villainsBet;
 
   const dispatch = useAppDispatch();
 
@@ -173,9 +176,8 @@ export const VillainContainer: React.FC = () => {
     const getRaiseSize = () => {
       switch (true) {
         case (herosBet * 3) > (villainsChips + villainsBet) / 2:
-          return villainsBet + villainsChips;
         case (herosBet * 3) > (herosBet + herosChips) / 2:
-          return herosChips + herosBet;
+          return maxBet;
         default:
           return herosBet * 3;
       }

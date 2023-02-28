@@ -215,9 +215,6 @@ const App: React.FC = () => {
       }
     };
 
-    // console.log(heroFinalCombination, villainFinalCombination);
-    // console.log(heroValueOfCombination, villainValueOfCombination);
-
     if (heroValueOfCombination !== villainValueOfCombination) {
       checkWinnerByCombination();
 
@@ -310,10 +307,7 @@ const App: React.FC = () => {
       <VillainContainer />
       <TabeleBody />
       <HeroContainer />
-      {(lastPlayer === PlayerType.HERO
-      && lastMove === ActionType.NONE) && (
-        <ActionButtons />
-      )}
+      <ActionButtons />
     </div>
   );
 };
