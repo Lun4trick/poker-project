@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "./static/css/main.1eed9874.css",
-    "main.js": "./static/js/main.e1372c4a.js",
+    "main.css": "./static/css/main.32ff55b7.css",
+    "main.js": "./static/js/main.3440e5aa.js",
     "static/media/DALL-E chips.png": "./static/media/DALL-E chips.63fef7b05b29b08cd234.png",
     "static/media/bet_chips.png": "./static/media/bet_chips.6bf6cd49751aeae6173e.png",
     "index.html": "./index.html",
-    "main.1eed9874.css.map": "./static/css/main.1eed9874.css.map",
-    "main.e1372c4a.js.map": "./static/js/main.e1372c4a.js.map"
+    "main.32ff55b7.css.map": "./static/css/main.32ff55b7.css.map",
+    "main.3440e5aa.js.map": "./static/js/main.3440e5aa.js.map"
   },
   "entrypoints": [
-    "static/css/main.1eed9874.css",
-    "static/js/main.e1372c4a.js"
+    "static/css/main.32ff55b7.css",
+    "static/js/main.3440e5aa.js"
   ]
 }
